@@ -22,6 +22,9 @@ export class HashMap {
 
     return hashCode;
   }
+  #getIndex(key) {
+    return this.#hash(key) % this.#capacity;
+  }
   #growthBuckets(size) {
     let tmpArr = [];
     this.#populateBuckets(size, tmpArr);
@@ -29,7 +32,7 @@ export class HashMap {
       if (list.size() != 0) {
         let tmp = list.head;
         while (tmp !== null) {
-          let index = this.#hash(tmp.key) % this.#capacity;
+          let index = this.#getIndex(tmp.key);
           tmpArr[index].append(tmp.key, tmp.value);
           tmp = tmp.next;
         }
@@ -42,7 +45,7 @@ export class HashMap {
       this.#capacity = this.#capacity * 2;
       this.#growthBuckets(this.#capacity);
     }
-    let index = this.#hash(key) % this.#capacity;
+    let index = this.#getIndex(key);
     let bucket = this.buckets[index];
     if (bucket.contain(key)) {
       let bucketIndex = bucket.find(key);
@@ -53,11 +56,29 @@ export class HashMap {
     this.#entriesCount++;
   }
   get(key) {
-    let index = this.#hash(key) % this.#capacity;
+    let index = this.#getIndex(key);
     let tmp = this.buckets[index].head;
     if (tmp !== null) {
       while (key !== tmp.key && tmp.next != null) tmp = tmp.next;
       if (key == tmp.key) return tmp.value;
     } else return null;
+  }
+  has(key) {
+    let index = this.#getIndex(key);
+    let tmp = this.buckets[index];
+    return tmp.contain(key);
+  }
+  remove(key) {
+    let index = this.#getIndex(key);
+    let previousNode = null;
+    let currentNode = this.buckets[index].head;
+    while (currentNode.next != null && currentNode.key !== key) {
+      previousNode = currentNode;
+      currentNode = currentNode.next;
+    }
+    if (currentNode.key == key) {
+      previousNode.next = currentNode.next;
+      return true;
+    } else return false;
   }
 }
