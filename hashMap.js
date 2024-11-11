@@ -77,16 +77,17 @@ export class HashMap {
       currentNode = currentNode.next;
     }
     if (currentNode.key == key) {
-      previousNode.next = currentNode.next;
+      if (currentNode == this.buckets[index].head) {
+        currentNode = currentNode.next;
+      } else {
+        previousNode.next = currentNode.next;
+      }
+      this.#entriesCount--;
       return true;
     } else return false;
   }
   length() {
-    let length = 0;
-    this.buckets.forEach((bucket) => {
-      length += bucket.size();
-    });
-    return length;
+    return this.#entriesCount;
   }
   clear() {
     for (let i = 0; i < this.buckets.length; i++) {
