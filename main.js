@@ -14,7 +14,4 @@ test.set("9", "hello9");
 test.set("10", "hello10");
 test.set("11", "hello11");
 test.set("12", "hello12");
-console.log(test.buckets[1]);
-console.log(test.remove("12"));
-console.log(test.remove("as"));
-console.log(test.buckets[1]);
+console.log(test.entries());

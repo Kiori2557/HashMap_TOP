@@ -81,4 +81,52 @@ export class HashMap {
       return true;
     } else return false;
   }
+  length() {
+    let length = 0;
+    this.buckets.forEach((bucket) => {
+      length += bucket.size();
+    });
+    return length;
+  }
+  clear() {
+    for (let i = 0; i < this.buckets.length; i++) {
+      this.buckets[i] = new LinkedList();
+    }
+  }
+  keys() {
+    let keyList = [];
+    this.buckets.forEach((bucket) => {
+      let tmp = bucket.head;
+      while (tmp !== null) {
+        keyList.push(tmp.key);
+        tmp = tmp.next;
+      }
+    });
+    return keyList;
+  }
+  values() {
+    let valueList = [];
+    this.buckets.forEach((bucket) => {
+      let tmp = bucket.head;
+      while (tmp !== null) {
+        valueList.push(tmp.value);
+        tmp = tmp.next;
+      }
+    });
+    return valueList;
+  }
+  entries() {
+    let entriesList = [];
+    this.buckets.forEach((bucket) => {
+      let tmp = bucket.head;
+      while (tmp !== null) {
+        let tmpArr = [];
+        tmpArr.push(tmp.key);
+        tmpArr.push(tmp.value);
+        entriesList.push(tmpArr);
+        tmp = tmp.next;
+      }
+    });
+    return entriesList;
+  }
 }
